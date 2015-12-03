@@ -46,9 +46,9 @@ public class Parking {
         if (vehicle != null && aTime >= vehicle.getTime()) {
             int firstDayTime = vehicle.getTime() % HOURS_IN_DAY;
             int hours = aTime - vehicle.getTime();
+            int lastDayTime = (hours - (HOURS_IN_DAY - firstDayTime)) % HOURS_IN_DAY;
             int nightHours;
-            if (hours >= HOURS_IN_DAY) {
-                int lastDayTime = (hours - (HOURS_IN_DAY - firstDayTime)) % HOURS_IN_DAY;
+            if (lastDayTime >= 0) {
                 int days = (hours - (HOURS_IN_DAY - firstDayTime) - lastDayTime) / HOURS_IN_DAY;
                 nightHours = days * NIGHT_HOURS + (lastDayTime < 6 ? lastDayTime : 6);
                 nightHours += (firstDayTime < 6 ? 6 - firstDayTime : 0) + 1;

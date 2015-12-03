@@ -17,8 +17,8 @@ public class ParkingLife {
     public static void main(String[] args) {
         Parking p = new Parking(3, 100);
         
-        System.out.println(p.park(1, 0));
-        System.out.println(p.unPark(1, 24));
+        System.out.println(p.park(1, 23));
+        System.out.println(p.unPark(1, 29));
 
         System.out.println(p.park(1, 12));
         System.out.println(p.unPark(1, 36));
