@@ -43,22 +43,20 @@ public class Parking {
 
     public float unPark(int aID, int aTime) {
         Vehicle vehicle = parking.remove(aID);
-        if (vehicle != null) {
+        if (vehicle != null && aTime >= vehicle.getTime()) {
+            int firstDayTime = vehicle.getTime() % HOURS_IN_DAY;
+            int hours = aTime - vehicle.getTime();
             int nightHours;
-            int firstDayTime = HOURS_IN_DAY - vehicle.getTime();
-            if (firstDayTime < aTime) {
-                int hours = aTime - (firstDayTime < HOURS_IN_DAY ? firstDayTime : 0);
-                int lastDayTime = hours % HOURS_IN_DAY;
-                int days = hours / HOURS_IN_DAY;
+            if (hours >= HOURS_IN_DAY) {
+                int lastDayTime = (hours - (HOURS_IN_DAY - firstDayTime)) % HOURS_IN_DAY;
+                int days = (hours - (HOURS_IN_DAY - firstDayTime) - lastDayTime) / HOURS_IN_DAY;
                 nightHours = days * NIGHT_HOURS + (lastDayTime < 6 ? lastDayTime : 6);
-                if (firstDayTime < HOURS_IN_DAY) {
-                    nightHours += (vehicle.getTime() < 6 ? 6 - vehicle.getTime() : 0) + 1;
-                }
+                nightHours += (firstDayTime < 6 ? 6 - firstDayTime : 0) + 1;
             } else {
-                nightHours = (vehicle.getTime() + aTime) <= 6 ? aTime : 6 - vehicle.getTime();
-                nightHours += (vehicle.getTime() + aTime) == HOURS_IN_DAY ? 1 : 0;
+                nightHours = firstDayTime < 6 ? 6 - firstDayTime : 0;
+                nightHours += firstDayTime + hours > 23 ? 1 : 0;
             }
-            return nightHours * price * 2 + (aTime - nightHours) * price;
+            return nightHours * price * 2 + (hours - nightHours) * price;
         }
         return 0f;
     }
